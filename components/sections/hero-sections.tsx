@@ -49,17 +49,21 @@ export default function HeroSection() {
             </div>
 
             {/* Right — hero visual */}
-            <div className="relative bg-[#E8D5A3] min-h-[60vh] lg:min-h-full flex items-end p-8 overflow-hidden">
-                {/* <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg,#C9A84C18 0%,#5C3D2E30 100%)' }} /> */}
-                <Image src="/deep-wave.png" fill alt="Deep Wave" className="object-cover" />
+            <div className="relative min-h-[60vh] lg:min-h-[70vh] overflow-hidden">
+                {/* bg-[#E8D5A3] */}
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg,#C9A84C18 0%,#5C3D2E30 100%)' }} />
+                <div className='relative overflow-hidden h-[95vh]'>   
+                <Image src="/images/long-brown-bone-straight.png" alt="Deep Wave" width={800} height={800}  className="object-top border" />
+                </div>
+                {/* <Image src="/images/long-pixie-curls.png" fill alt="Deep Wave" className="" /> */}
 
                 {/* Decorative large text */}
-                <p className="absolute bottom-[-16px] right-4 font-cormorant text-[100px] font-light italic text-[#1A1208]/05 select-none whitespace-nowrap">
+                <p className="absolute z-100 text-[#E8D5A3] bottom-[-16px] right-4 font-cormorant text-[100px] font-light italic text-[#1A1208]/05 select-none whitespace-nowrap">
                     didifairy
                 </p>
 
                 {/* Featured badge */}
-                <div className="relative z-10 bg-[#FDFAF5] border-l-[3px] border-[#B8962E] px-4 py-3">
+                <div className="absolute left-0 bottom-0 z-10 bg-[#FDFAF5] border-l-[3px] border-[#B8962E] px-4 py-3">
                     <p className="text-[9px] tracking-[0.2em] uppercase text-[#B8962E] mb-1">Featured piece</p>
                     <p className="font-cormorant text-lg italic text-[#1A1208]">300g Deep wave · 30inch · 5X5 closure</p>
                     <p className="text-[10px] text-[#7A6856]">₦750,000 — Available now</p>

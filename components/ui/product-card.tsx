@@ -5,6 +5,7 @@ import { formatNGN } from '@/lib/utils'
 import { useCart } from '@/stores/cart-store'
 import { ShoppingBag, Check } from 'lucide-react'
 import { useState } from 'react'
+import Image from 'next/image'
 
 interface ProductCardProps {
     product: Product
@@ -31,11 +32,14 @@ export default function ProductCard({ product }: ProductCardProps) {
     return (
         <div className="group cursor-pointer">
             {/* Image / Swatch */}
-            <div className="relative aspect-[3/4] mb-3 overflow-hidden">
+            <div className="relative aspect-3/4 mb-3 overflow-hidden">
                 <div
                     className="w-full h-full transition-transform duration-500 group-hover:scale-105"
                     style={{ background: swatchMap[product.color] ?? 'linear-gradient(160deg,#B4B2A9,#888780)' }}
                 />
+                {/* the image */}
+                <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
+                
                 {/* Overlay name */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A1208]/50 to-transparent" />
                 <p className="absolute bottom-3 left-3 font-cormorant text-base italic text-[#FDFAF5]/90">{product.name}</p>

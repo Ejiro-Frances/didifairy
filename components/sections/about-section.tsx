@@ -17,7 +17,7 @@ export default function AboutSection() {
                         Based in Lagos, shipping across Nigeria. Every order is personally inspected before it leaves our hands.
                     </p>
                     <a
-                        href="https://wa.me/2348000000000"
+                        href="https://wa.me/2347039937762"
                         className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase bg-[#B8962E] text-[#1A1208] px-7 py-3.5 font-medium hover:bg-[#E8D5A3] transition-colors"
                     >
                         Chat with us on WhatsApp

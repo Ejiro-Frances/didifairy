@@ -4,6 +4,7 @@ import ProductsSection from '@/components/sections/product-section'
 import GallerySection from '@/components/sections/gallery-section'
 import AboutSection from '@/components/sections/about-section'
 import Navbar from '@/components/nav-bar'
+import Footer from '@/components/footer'
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
         <GallerySection />
         <AboutSection />
       </main>
+      <Footer />
     </>
   )
 }

@@ -1,4 +1,5 @@
 import { reviews } from '@/lib/data'
+import Image from 'next/image'
 
 const galleryBgs = [
     'linear-gradient(160deg,#C9A84C30,#8B225240)',
@@ -36,7 +37,7 @@ export default function GallerySection() {
                         >
                             {/* Gradient overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-[#1A1208]/60 via-transparent to-transparent" />
-
+                            <Image src={review.image} alt={review.name} fill className="object-cover" />
                             {/* Content */}
                             <div className="absolute bottom-0 left-0 right-0 p-3">
                                 <p className="text-[10px] text-[#FDFAF5]/60 mb-0.5">{review.handle}</p>
@@ -58,7 +59,7 @@ export default function GallerySection() {
                 {/* CTA */}
                 <div className="mt-8 text-center">
                     <a
-                        href="https://wa.me/2348000000000"
+                        href="https://wa.me/2347039937762"
                         className="inline-block text-[11px] tracking-[0.15em] uppercase text-[#7A6856] border border-[#B8962E] px-8 py-3 hover:bg-[#B8962E] hover:text-[#FDFAF5] transition-all"
                     >
                         Send us your photo · Get featured
