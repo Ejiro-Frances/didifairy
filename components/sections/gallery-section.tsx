@@ -37,7 +37,7 @@ export default function GallerySection() {
                         >
                             {/* Gradient overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-[#1A1208]/60 via-transparent to-transparent" />
-                            <Image src={review.image} alt={review.name} fill className="object-cover" />
+                            <Image src={review.image} alt={review.name} width={600} height={500} objectFit='bottom-left'/>
                             {/* Content */}
                             <div className="absolute bottom-0 left-0 right-0 p-3">
                                 <p className="text-[10px] text-[#FDFAF5]/60 mb-0.5">{review.handle}</p>

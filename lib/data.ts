@@ -89,9 +89,9 @@ export const products: Product[] = [
 
 export const reviews: CustomerReview[] = [
     { id: '1', name: 'Adaeze Okafor', handle: '@adaeze_luxury', image: '/images/customer-1.jpg', quote: 'This hair is everythinggg, so soft!', rating: 5, product: 'SDD Burgundy' },
-    { id: '2', name: 'Bimpe Adeyemi', handle: '@bimpe.hair', image: '/reviews/r2.jpg', quote: 'Quality is unmatched, will always come back!', rating: 5, product: 'Deep Wave Frontal' },
-    { id: '3', name: 'Kemi Okonkwo', handle: '@kemi_glam', image: '/reviews/r3.jpg', quote: 'Didifairy never disappoints. Period.', rating: 5, product: 'Body Wave Luxury' },
-    { id: '4', name: 'Titi Fashola', handle: '@titi.luxe', image: '/reviews/r4.jpg', quote: 'Got so many compliments, thank you!', rating: 5, product: 'Kinky Straight' },
-    { id: '5', name: 'Sola Abiodun', handle: '@sola_vibes', image: '/reviews/r5.jpg', quote: 'Fast delivery, premium packaging!', rating: 5, product: 'SDD Burgundy' },
-    { id: '6', name: 'Precious Eze', handle: '@precious_hair', image: '/reviews/r6.jpg', quote: 'Better than the pictures!', rating: 5, product: 'Loose Deep Wave' },
+    { id: '2', name: 'Bimpe Adeyemi', handle: '@bimpe.hair', image: '/images/customer-1.jpg', quote: 'Quality is unmatched, will always come back!', rating: 5, product: 'Deep Wave Frontal' },
+    { id: '3', name: 'Kemi Okonkwo', handle: '@kemi_glam', image: '/images/customer-1.jpg', quote: 'Didifairy never disappoints. Period.', rating: 5, product: 'Body Wave Luxury' },
+    { id: '4', name: 'Titi Fashola', handle: '@titi.luxe', image: '/images/customer-1.jpg', quote: 'Got so many compliments, thank you!', rating: 5, product: 'Kinky Straight' },
+    { id: '5', name: 'Sola Abiodun', handle: '@sola_vibes', image: '/images/customer-1.jpg', quote: 'Fast delivery, premium packaging!', rating: 5, product: 'SDD Burgundy' },
+    { id: '6', name: 'Precious Eze', handle: '@precious_hair', image: '/images/customer-1.jpg', quote: 'Better than the pictures!', rating: 5, product: 'Loose Deep Wave' },
 ]

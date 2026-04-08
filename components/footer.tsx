@@ -28,15 +28,19 @@ export default function Footer() {
                     <p className="text-[10px] tracking-[0.2em] uppercase text-[#B8962E] mb-4">Get in touch</p>
                     <div className="flex flex-col gap-2 text-[12px] text-[#FDFAF5]/50">
                         <span>Lagos, Nigeria</span>
-                        <a href="https://wa.me/2348000000000" className="hover:text-[#B8962E] transition-colors">WhatsApp us</a>
-                        <a href="https://instagram.com/didifairy" className="hover:text-[#B8962E] transition-colors">@didifairy</a>
+                        <a href="https://wa.me/2347093808804" className="hover:text-[#B8962E] transition-colors">WhatsApp us</a>
+                        <a href="https://www.instagram.com/didifairy_ng/" className="hover:text-[#B8962E] transition-colors">@didifairy</a>
                     </div>
                     <div className="flex gap-4 mt-6">
-                        {['Instagram', 'TikTok', 'WhatsApp'].map(s => (
+                        {['TikTok', 'WhatsApp'].map(s => (
                             <a key={s} href="#" className="text-[10px] tracking-[0.15em] uppercase text-[#FDFAF5]/30 hover:text-[#B8962E] transition-colors">
                                 {s}
                             </a>
-                        ))}
+                            ))}
+                            <a href="https://www.instagram.com/didifairy_ng/" className="text-[10px] tracking-[0.15em] uppercase text-[#FDFAF5]/30 hover:text-[#B8962E] transition-colors">
+                                Instagram
+                            </a>
+
                     </div>
                 </div>
             </div>

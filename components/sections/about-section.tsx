@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function AboutSection() {
     return (
         <section id="about" className="bg-[#1A1208] py-24 px-6 lg:px-16">
@@ -5,15 +7,15 @@ export default function AboutSection() {
 
                 {/* Text side */}
                 <div>
-                    <p className="text-[10px] tracking-[0.3em] uppercase text-[#B8962E] mb-4">Our story</p>
+                    <p className="text-[10px] lg:text-xl tracking-[0.3em] uppercase text-[#B8962E] mb-4">Our story</p>
                     <h2 className="font-cormorant text-4xl lg:text-5xl font-light text-[#FDFAF5] leading-[1.1] mb-6">
                         Hair that tells<br />
                         your <em className="text-[#E8D5A3]">story.</em>
                     </h2>
-                    <p className="text-[13px] leading-loose text-[#FDFAF5]/50 mb-8 max-w-md">
+                    <p className="text-[13px] lg:text-xl leading-loose text-[#FDFAF5]/50 mb-8 max-w-md">
                         Didifairy was born from a simple belief — every woman deserves hair that makes her feel powerful, seen, and beautiful. We source only the finest raw human hair, cut once, never chemically processed.
                     </p>
-                    <p className="text-[13px] leading-loose text-[#FDFAF5]/50 mb-10 max-w-md">
+                    <p className="text-[13px] lg:text-xl leading-loose text-[#FDFAF5]/50 mb-10 max-w-md">
                         Based in Lagos, shipping across Nigeria. Every order is personally inspected before it leaves our hands.
                     </p>
                     <a
@@ -27,6 +29,7 @@ export default function AboutSection() {
                 {/* Visual side */}
                 <div className="relative">
                     <div className="aspect-[4/5] bg-[#2C1810] rounded-sm relative overflow-hidden">
+                    <Image src="/images/short-pixie.png" alt="About" fill className="object-cover" />
                         <div className="absolute inset-0 flex items-center justify-center">
                             <div className="text-center">
                                 <p className="font-cormorant text-5xl italic font-light text-[#FDFAF5]/10">didifairy</p>
