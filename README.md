@@ -1,36 +1,194 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Didifairy — Premium Human Hair E-commerce
 
-## Getting Started
+A full-stack e-commerce app for **Didifairy** (premium human hair, Lagos, prices in ₦).
+Customers browse products, check out as a guest or a registered user, pay by bank
+transfer and attach a receipt, then track their order. Admins manage orders,
+products, customers and enquiries from a gated dashboard.
 
-First, run the development server:
+Built with **Next.js 16 (App Router)**, **Supabase**, **Zustand**, **Tailwind CSS 4**,
+**Zod**, **Sentry**, and tested with **Vitest** + **Playwright**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+> ℹ️ This project runs on a customised build of Next.js. Before changing framework
+> code, read the relevant guide in `node_modules/next/dist/docs/` (see `AGENTS.md`).
+> Notably, this version uses **`proxy.ts`** instead of `middleware.ts`, and route
+> `params`/`searchParams` are **async** (Promises).
+
+---
+
+## Features
+
+**Storefront**
+- Product grid + **product detail pages** with an image/video gallery.
+- Cart (Zustand) with a slide-over drawer.
+- **Guest checkout** (no account needed) with server-validated pricing.
+- **Bank transfer** payment: account number shown at checkout, customer uploads a
+  payment **receipt**, admin verifies and confirms.
+- **Order tracking** by tracking code — no account required.
+- **Contact** form.
+
+**Accounts**
+- Customer **sign up / log in** (Supabase Auth). Phone number is required.
+- **My orders** page — logged-in customers see their orders (including guest
+  orders placed with the same email).
+
+**Admin** (`/admin`, gated to the admin email)
+- Dashboard with order stats + order management (advance status, confirm payment,
+  view receipts).
+- **Product management**: create/edit/delete, upload **≥3 images + optional video**,
+  toggle available / sold-out.
+- **Customers** list with phone + delivery address.
+- **Messages** from the contact form.
+
+**Cross-cutting**
+- **Zod** validation on every form (client + server) with inline field errors.
+- **Sentry** error tracking (client, server, edge).
+- Unit tests (Vitest) + end-to-end tests (Playwright).
+
+---
+
+## Tech stack
+
+| Concern | Choice |
+|---|---|
+| Framework | Next.js 16 (App Router, React 19) |
+| Database / Auth / Storage | Supabase (Postgres + Auth + Storage) |
+| State | Zustand (cart) |
+| Styling | Tailwind CSS 4 |
+| Validation | Zod |
+| Errors | Sentry (`@sentry/nextjs`) |
+| Payments | Bank transfer + receipt (Paystack planned) |
+| Notifications | WhatsApp click-to-chat (Cloud API planned) |
+| Tests | Vitest + Testing Library, Playwright |
+| Package manager | pnpm |
+
+---
+
+## Project structure
+
+```
+app/
+  (storefront)         page.tsx, products/[id], checkout, orders/[id], track, contact
+  account/             customer order history (auth-gated)
+  login, signup/       auth screens
+  admin/               dashboard, products, customers, messages (admin-gated, has layout+sidebar)
+  api/                 orders, orders/[id]/receipt, health
+  actions/             server actions (auth, orders, contact)
+components/            ui, auth, admin, product, checkout, orders, contact + sections
+lib/
+  supabase/            browser / server / service-role clients + env
+  orders.ts            order persistence (service role)
+  products.ts          product reads + admin CRUD + media upload
+  admin.ts             profiles + contact messages
+  auth.ts              getCurrentUser / requireAdmin
+  validation.ts        Zod schemas
+  order-utils.ts       pure helpers (order/tracking codes, WhatsApp url)
+proxy.ts               session refresh + route gating (/admin, /account)
+supabase/              schema.sql, schema-002-accounts.sql
+scripts/               create-admin.mjs
+__tests__/, e2e/       Vitest + Playwright tests
+docs/SETUP.md          step-by-step account/credential setup
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Getting started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Install
 
-## Learn More
+```bash
+pnpm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Configure environment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Copy the template and fill in your keys (see **`docs/SETUP.md`** for how to obtain each):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+cp .env.example .env.local   # or .env
+```
 
-## Deploy on Vercel
+Minimum to run with real data:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
+ADMIN_EMAIL=admin@didifairy.com
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Shown to customers at checkout
+NEXT_PUBLIC_BANK_NAME=...
+NEXT_PUBLIC_BANK_ACCOUNT_NAME=...
+NEXT_PUBLIC_BANK_ACCOUNT_NUMBER=...
+```
+
+> Without Supabase configured, the storefront still runs and falls back to the seed
+> products in `lib/data.ts`; checkout and accounts require Supabase.
+
+### 3. Set up the database
+
+In the Supabase dashboard → **SQL Editor**, run both files in order:
+
+1. `supabase/schema.sql` — products + orders tables, RLS, `product-media` bucket.
+2. `supabase/schema-002-accounts.sql` — profiles, `orders.user_id` + `receipt_url`,
+   `contact_messages`, private `receipts` bucket.
+
+### 4. Create the admin user
+
+```bash
+node --env-file=.env scripts/create-admin.mjs
+```
+
+Uses `ADMIN_EMAIL` / `ADMIN_PASSWORD` (defaults: `admin@didifairy.com` / `DidiAdmin@123`).
+Log in at `/login`. **Change the password after first login.**
+
+> For instant customer signups, disable **Authentication → Email → "Confirm email"**
+> in Supabase; otherwise new users must confirm via email before logging in.
+
+### 5. Run
+
+```bash
+pnpm dev        # http://localhost:3000
+```
+
+---
+
+## Testing
+
+```bash
+pnpm test          # Vitest unit tests (run once)
+pnpm test:watch    # Vitest watch mode
+pnpm test:e2e      # Playwright E2E (builds + starts the app automatically)
+```
+
+First Playwright run: `pnpm exec playwright install` to download browsers.
+
+---
+
+## Architecture notes
+
+- **Single source of truth is Supabase.** All order writes go through the
+  **service-role** client on the server (`lib/orders.ts`) — the browser never writes
+  orders. Orders carry customer PII and have **no anonymous RLS access**.
+- **Prices are recomputed server-side** in `POST /api/orders` from product data, so
+  a client can never tamper with amounts. Payment status starts `pending` and only
+  the admin (or, later, a verified Paystack webhook) sets it to `paid`.
+- **Auth is defence-in-depth:** `proxy.ts` gates `/admin` and `/account`, *and* every
+  admin Server Action calls `requireAdmin()` (Server Actions are reachable via direct
+  POST, so proxy alone is not enough).
+- **Receipts** live in a **private** Storage bucket; the admin views them through
+  short-lived signed URLs.
+- **Sentry** is a no-op until `NEXT_PUBLIC_SENTRY_DSN` is set, so local dev stays clean.
+
+---
+
+## Roadmap
+
+- **Paystack** card payments (initialise → callback → verified webhook).
+- **WhatsApp Cloud API** automated order notifications (currently click-to-chat).
+- Expanded Playwright coverage of the full purchase flow.
+
+## Deployment
+
+Deploy on any Node host (e.g. Vercel). Set all environment variables in the host,
+run both SQL files against your Supabase project, create the admin user, and point
+`NEXT_PUBLIC_APP_URL` at your domain.
