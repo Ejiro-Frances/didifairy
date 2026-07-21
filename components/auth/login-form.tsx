@@ -16,6 +16,11 @@ export default function LoginForm({ redirectTo, message }: { redirectTo?: string
           Check your email to confirm your account, then log in.
         </p>
       )}
+      {message === 'auth-error' && (
+        <p className="rounded bg-red-50 px-3 py-2 text-sm text-red-700">
+          That confirmation link is invalid or has expired. Please sign in, or sign up again.
+        </p>
+      )}
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
 
       <input type="hidden" name="redirect" value={redirectTo ?? ''} />

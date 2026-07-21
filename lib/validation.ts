@@ -53,10 +53,20 @@ export const signupSchema = z
   })
 export type SignupInput = z.infer<typeof signupSchema>
 
+export const profileSchema = z.object({
+  fullName: name,
+  phone,
+  address: z.string().trim().max(200).optional().or(z.literal('')),
+  city: z.string().trim().max(80).optional().or(z.literal('')),
+  state: z.string().trim().max(80).optional().or(z.literal('')),
+})
+export type ProfileInput = z.infer<typeof profileSchema>
+
 export const productSchema = z.object({
   name: z.string().trim().min(1, 'Required').max(120),
   description: z.string().trim().max(1000).optional().or(z.literal('')),
   price: z.coerce.number().int('Whole Naira only').min(0, 'Price must be positive'),
+  quantity: z.coerce.number().int('Whole number only').min(0, 'Stock cannot be negative'),
   status: z.enum(['available', 'sold_out']),
   color: z.string().trim().max(60).optional().or(z.literal('')),
   length: z.string().trim().max(60).optional().or(z.literal('')),

@@ -1,5 +1,6 @@
 'use server'
 
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -42,8 +43,20 @@ export async function signupAction(_prev: AuthState, formData: FormData): Promis
 
   const { fullName, email, phone, password, address, city, state } = parsed.data
 
+  // Send the confirmation email back to whatever origin the request came from
+  // (localhost in dev, your domain in prod), falling back to NEXT_PUBLIC_APP_URL.
+  const hdrs = await headers()
+  const origin =
+    hdrs.get('origin') ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    'http://localhost:3000'
+
   const supabase = await createClient()
-  const { data, error } = await supabase.auth.signUp({ email, password })
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo: `${origin}/auth/callback` },
+  })
   if (error || !data.user) {
     return { error: error?.message ?? 'Could not create account' }
   }

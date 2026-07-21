@@ -49,7 +49,8 @@ export async function createProductAction(
   if (!parsed.success) return { fieldErrors: fieldErrors(parsed.error) }
 
   const { images, video } = parseUrls(formData)
-  if (images.length < 3) return { error: 'Please upload at least 3 product images.' }
+  if (images.length < 1) return { error: 'Please upload at least 1 product image.' }
+  if (images.length > 4) return { error: 'A product can have at most 4 images.' }
 
   try {
     await createProduct({
@@ -90,7 +91,8 @@ export async function updateProductAction(
   }
   const { images: uploaded, video } = parseUrls(formData)
   const images = [...existing, ...uploaded]
-  if (images.length < 3) return { error: 'A product needs at least 3 images.' }
+  if (images.length < 1) return { error: 'A product needs at least 1 image.' }
+  if (images.length > 4) return { error: 'A product can have at most 4 images.' }
 
   try {
     await updateProduct(id, {

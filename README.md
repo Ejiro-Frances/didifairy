@@ -187,6 +187,28 @@ First Playwright run: `pnpm exec playwright install` to download browsers.
 - **WhatsApp Cloud API** automated order notifications (currently click-to-chat).
 - Expanded Playwright coverage of the full purchase flow.
 
+## CI/CD
+
+GitHub Actions runs on every push to `main` and every pull request
+(`.github/workflows/ci.yml`):
+
+- **quality** — `pnpm lint`, `pnpm test` (Vitest), `pnpm build`.
+- **e2e** — Playwright smoke tests (builds/starts the app itself; no secrets needed).
+- **deploy** — production deploy to Vercel, **off by default**. It runs only on `main`
+  after the other jobs pass, and only when opt-in is enabled.
+
+### Enabling the Vercel deploy
+
+1. Repo **Settings → Secrets and variables → Actions**:
+   - **Variable:** `ENABLE_VERCEL_DEPLOY = true`
+   - **Secrets:** `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
+     (from `vercel link` locally, or the Vercel dashboard).
+2. Set your runtime env vars (Supabase, bank details, etc.) in the **Vercel project**
+   settings — `vercel build` pulls them from there, not from GitHub.
+
+> Prefer Vercel's native Git integration instead? Just leave `ENABLE_VERCEL_DEPLOY`
+> unset — the deploy job is skipped and Vercel deploys on push as usual.
+
 ## Deployment
 
 Deploy on any Node host (e.g. Vercel). Set all environment variables in the host,

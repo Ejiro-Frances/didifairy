@@ -11,6 +11,7 @@ interface ProductRow {
   description: string
   price: number
   status: 'available' | 'sold_out'
+  quantity: number | null
   images: string[] | null
   video: string | null
   color: string | null
@@ -27,6 +28,7 @@ function mapRow(row: ProductRow): Product {
     description: row.description ?? '',
     price: row.price,
     status: row.status,
+    quantity: row.quantity ?? 0,
     images: row.images ?? [],
     video: row.video ?? undefined,
     color: row.color ?? '',
@@ -73,6 +75,7 @@ export interface ProductWriteInput {
   description: string
   price: number
   status: 'available' | 'sold_out'
+  quantity: number
   images: string[]
   video?: string | null
   color?: string | null
@@ -80,6 +83,24 @@ export interface ProductWriteInput {
   closure?: string | null
   category: string
   featured?: boolean
+}
+
+// Reduce a product's stock after a purchase. Marks it sold_out at zero.
+// No-op for static/demo products that aren't in the DB.
+export async function decrementStock(productId: string, qty: number): Promise<void> {
+  const supabase = createServiceClient()
+  const { data } = await supabase
+    .from('products')
+    .select('quantity')
+    .eq('id', productId)
+    .maybeSingle()
+  if (!data) return
+
+  const next = Math.max(0, (data.quantity ?? 0) - qty)
+  await supabase
+    .from('products')
+    .update({ quantity: next, ...(next <= 0 ? { status: 'sold_out' } : {}) })
+    .eq('id', productId)
 }
 
 export async function createProduct(input: ProductWriteInput): Promise<Product> {

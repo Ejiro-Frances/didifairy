@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createOrder } from '@/lib/orders'
-import { getProductById } from '@/lib/products'
+import { decrementStock, getProductById } from '@/lib/products'
 import { getCurrentUser } from '@/lib/auth'
 import { checkoutSchema, fieldErrors } from '@/lib/validation'
 import { CustomerProfile, OrderItem, PaymentMethod } from '@/types/types'
@@ -59,6 +59,13 @@ export async function POST(request: NextRequest) {
     if (product.status === 'sold_out') {
       return Response.json({ error: `${product.name} is sold out` }, { status: 409 })
     }
+    // Stock check — only for real (DB) products that track quantity.
+    if (typeof product.quantity === 'number' && product.quantity < qty) {
+      return Response.json(
+        { error: `Only ${product.quantity} left of ${product.name}` },
+        { status: 409 }
+      )
+    }
     orderItems.push({
       productId: product.id,
       productName: product.name,
@@ -99,6 +106,10 @@ export async function POST(request: NextRequest) {
       paymentMethod,
       userId: user?.id ?? null,
     })
+
+    // Reduce stock (auto sold-out at zero). Best-effort — doesn't fail the order.
+    await Promise.all(orderItems.map(i => decrementStock(i.productId, i.quantity)))
+
     return Response.json({ order }, { status: 201 })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to create order'
