@@ -6,6 +6,7 @@ import { useCart } from '@/stores/cart-store'
 import { ShoppingBag, Check } from 'lucide-react'
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface ProductCardProps {
     product: Product
@@ -30,29 +31,33 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
 
     return (
-        <div className="group cursor-pointer">
-            {/* Image / Swatch */}
-            <div className="relative aspect-3/4 mb-3 overflow-hidden">
-                <div
-                    className="w-full h-full transition-transform duration-500 group-hover:scale-105"
-                    style={{ background: swatchMap[product.color] ?? 'linear-gradient(160deg,#B4B2A9,#888780)' }}
-                />
-                {/* the image */}
-                <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
-                
-                {/* Overlay name */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1208]/50 to-transparent" />
-                <p className="absolute bottom-3 left-3 font-cormorant text-base italic text-[#FDFAF5]/90">{product.name}</p>
+        <div className="group">
+            {/* Image / Swatch — clicking opens the product detail page */}
+            <Link href={`/products/${product.id}`} className="block cursor-pointer">
+                <div className="relative aspect-3/4 mb-3 overflow-hidden">
+                    <div
+                        className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+                        style={{ background: swatchMap[product.color] ?? 'linear-gradient(160deg,#B4B2A9,#888780)' }}
+                    />
+                    {/* the image */}
+                    {product.images[0] && (
+                        <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
+                    )}
 
-                {/* Sold out overlay */}
-                {!isAvailable && (
-                    <div className="absolute inset-0 bg-[#1A1208]/30 flex items-center justify-center">
-                        <span className="text-[10px] tracking-[0.25em] uppercase text-[#FDFAF5]/80 border border-[#FDFAF5]/30 px-3 py-1">
-                            Sold out
-                        </span>
-                    </div>
-                )}
-            </div>
+                    {/* Overlay name */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1A1208]/50 to-transparent" />
+                    <p className="absolute bottom-3 left-3 font-cormorant text-base italic text-[#FDFAF5]/90">{product.name}</p>
+
+                    {/* Sold out overlay */}
+                    {!isAvailable && (
+                        <div className="absolute inset-0 bg-[#1A1208]/30 flex items-center justify-center">
+                            <span className="text-[10px] tracking-[0.25em] uppercase text-[#FDFAF5]/80 border border-[#FDFAF5]/30 px-3 py-1">
+                                Sold out
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </Link>
 
             {/* Status */}
             <span className={`inline-block text-[9px] tracking-[0.18em] uppercase px-3 py-1 rounded-full border mb-2 ${isAvailable

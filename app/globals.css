@@ -144,3 +144,28 @@
 .animation {
   animation: marquee 30s linear infinite;
 }
+
+@layer base {
+  /* All interactive buttons get a pointer cursor (disabled ones don't). */
+  button:not(:disabled),
+  label[role="button"],
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  /* Hide the browser's built-in password reveal (Edge/IE) so our own
+     eye toggle is the single, consistent control across browsers. */
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
+  }
+}
+
+/* Lively, on-brand background for the auth (login/signup) screens. */
+.auth-bg {
+  background:
+    radial-gradient(45rem 45rem at 12% 8%, rgba(184, 150, 46, 0.22), transparent 60%),
+    radial-gradient(40rem 40rem at 88% 92%, rgba(92, 61, 46, 0.20), transparent 55%),
+    radial-gradient(30rem 30rem at 75% 15%, rgba(232, 213, 163, 0.35), transparent 60%),
+    linear-gradient(140deg, #fdfaf5 0%, #f6ecd6 55%, #f0e2c4 100%);
+}

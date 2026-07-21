@@ -36,14 +36,14 @@ export default function GallerySection() {
                             style={{ background: galleryBgs[i % galleryBgs.length] }}
                         >
                             {/* Gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#1A1208]/60 via-transparent to-transparent" />
+                            <div className="absolute inset-0 bg-linear-to-t from-[#1A1208]/60 via-transparent to-transparent" />
                             <Image src={review.image} alt={review.name} width={600} height={500} objectFit='bottom-left'/>
                             {/* Content */}
                             <div className="absolute bottom-0 left-0 right-0 p-3">
                                 <p className="text-[10px] text-[#FDFAF5]/60 mb-0.5">{review.handle}</p>
                                 {i === 0 && (
                                     <>
-                                        <p className="text-[12px] text-[#FDFAF5] font-medium leading-snug mb-1">"{review.quote}"</p>
+                                        <p className="text-[12px] text-[#FDFAF5] font-medium leading-snug mb-1">{`"${review.quote}"`}</p>
                                         <div className="flex gap-0.5">
                                             {Array.from({ length: review.rating }).map((_, s) => (
                                                 <span key={s} className="text-[#B8962E] text-[11px]">★</span>

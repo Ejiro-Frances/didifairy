@@ -15,16 +15,21 @@ interface CartState {
     closeCart: () => void
 }
 
-export const useCart = create<CartState>((set, get) => ({
+// Derived totals must be recomputed whenever `items` changes. Zustand getters on
+// the state object are evaluated once at creation and never react, so instead we
+// compute the totals from the next `items` array inside every mutating action.
+function totals(items: CartItem[]) {
+    return {
+        totalItems: items.reduce((sum, i) => sum + i.quantity, 0),
+        totalPrice: items.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
+    }
+}
+
+export const useCart = create<CartState>((set) => ({
     items: [],
     isOpen: false,
-
-    get totalItems() {
-        return get().items.reduce((sum, i) => sum + i.quantity, 0)
-    },
-    get totalPrice() {
-        return get().items.reduce((sum, i) => sum + i.product.price * i.quantity, 0)
-    },
+    totalItems: 0,
+    totalPrice: 0,
 
     addItem: (product: Product) => {
         set(state => {
@@ -34,26 +39,28 @@ export const useCart = create<CartState>((set, get) => ({
                     i.product.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
                 )
                 : [...state.items, { product, quantity: 1 }]
-            return { items, isOpen: true }
+            return { items, isOpen: true, ...totals(items) }
         })
     },
 
     removeItem: (productId: string) => {
-        set(state => ({
-            items: state.items.filter(i => i.product.id !== productId),
-        }))
+        set(state => {
+            const items = state.items.filter(i => i.product.id !== productId)
+            return { items, ...totals(items) }
+        })
     },
 
     updateQuantity: (productId: string, qty: number) => {
         if (qty < 1) return
-        set(state => ({
-            items: state.items.map(i =>
+        set(state => {
+            const items = state.items.map(i =>
                 i.product.id === productId ? { ...i, quantity: qty } : i
-            ),
-        }))
+            )
+            return { items, ...totals(items) }
+        })
     },
 
-    clearCart: () => set({ items: [] }),
+    clearCart: () => set({ items: [], totalItems: 0, totalPrice: 0 }),
     openCart: () => set({ isOpen: true }),
     closeCart: () => set({ isOpen: false }),
 }))

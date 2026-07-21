@@ -1,0 +1,37 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Didifairy icon mark</title>
+  <desc>Standalone D lettermark with golden wave — for profile pictures and app icons</desc>
+
+  <!-- circle background -->
+  <circle cx="256" cy="256" r="256" fill="#1A1208"/>
+  <circle cx="256" cy="256" r="238" fill="none" stroke="#B8962E" stroke-width="4" opacity="0.4"/>
+
+  <!-- D letterform -->
+  <path d="M138 100
+    L138 412
+    Q138 436 162 436
+    L240 436
+    Q366 436 404 334
+    Q432 252 404 174
+    Q366 76 240 76
+    L162 76
+    Q138 76 138 100 Z"
+    fill="none"
+    stroke="#FDFAF5"
+    stroke-width="18"
+    stroke-linejoin="round"
+    stroke-linecap="round"/>
+
+  <!-- golden wave -->
+  <path d="M138 258
+    Q218 178 306 258
+    Q218 338 138 258"
+    fill="#B8962E"/>
+
+  <!-- accent curl top right -->
+  <path d="M178 82 Q296 118 316 202"
+    fill="none"
+    stroke="#B8962E"
+    stroke-width="12"
+    stroke-linecap="round"/>
+</svg>
