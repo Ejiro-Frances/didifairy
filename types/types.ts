@@ -4,6 +4,7 @@ export interface Product {
     description: string
     price: number
     status: 'available' | 'sold_out'
+    quantity?: number
     images: string[]
     video?: string
     color: string

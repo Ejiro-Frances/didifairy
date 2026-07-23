@@ -32,7 +32,7 @@ export default async function AdminProductsPage() {
               </div>
               <div className="flex-1">
                 <p className="font-medium">{p.name}</p>
-                <p className="text-sm text-[#7A6856]">{formatNGN(p.price)} · {p.category}</p>
+                <p className="text-sm text-[#7A6856]">{formatNGN(p.price)} · {p.category} · Stock: {p.quantity ?? 0}</p>
               </div>
               <span className={`rounded-full px-3 py-1 text-[10px] uppercase tracking-wider ${p.status === 'available' ? 'bg-[#B8962E]/10 text-[#7A5C00]' : 'bg-[#5C3D2E]/10 text-[#7A6856]'}`}>
                 {p.status === 'available' ? 'Available' : 'Sold out'}

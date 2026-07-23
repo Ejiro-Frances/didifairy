@@ -52,15 +52,18 @@ describe('contactSchema', () => {
 })
 
 describe('productSchema', () => {
-  it('coerces price from a string to an integer', () => {
-    const result = productSchema.safeParse({ name: 'Wig', price: '590000', status: 'available', category: 'Bundles' })
+  it('coerces price and quantity from strings to integers', () => {
+    const result = productSchema.safeParse({ name: 'Wig', price: '590000', quantity: '5', status: 'available', category: 'Bundles' })
     expect(result.success).toBe(true)
-    if (result.success) expect(result.data.price).toBe(590000)
+    if (result.success) {
+      expect(result.data.price).toBe(590000)
+      expect(result.data.quantity).toBe(5)
+    }
   })
 
   it('rejects an unknown status', () => {
     expect(
-      productSchema.safeParse({ name: 'Wig', price: 1000, status: 'nope', category: 'Bundles' }).success
+      productSchema.safeParse({ name: 'Wig', price: 1000, quantity: 1, status: 'nope', category: 'Bundles' }).success
     ).toBe(false)
   })
 })

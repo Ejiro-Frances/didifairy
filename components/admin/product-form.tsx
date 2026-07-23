@@ -11,6 +11,8 @@ import { Product } from '@/types/types'
 type Action = (prev: ProductFormState, formData: FormData) => Promise<ProductFormState>
 type Preview = { file: File; url: string }
 
+const MAX_IMAGES = 4
+
 async function uploadMedia(files: File[], folder: 'products' | 'videos'): Promise<string[]> {
   if (files.length === 0) return []
   const fd = new FormData()
@@ -53,10 +55,13 @@ export default function ProductForm({
     }
   }, [])
 
+  const existingCount = isEdit ? product!.images.length : 0
+
   function onAddImages(e: React.ChangeEvent<HTMLInputElement>) {
     const incoming = Array.from(e.target.files ?? [])
     const merged = [...images]
     for (const file of incoming) {
+      if (existingCount + merged.length >= MAX_IMAGES) break // cap at 4 total
       const dup = merged.some(m => m.file.name === file.name && m.file.size === file.size)
       if (!dup) merged.push({ file, url: URL.createObjectURL(file) })
     }
@@ -75,9 +80,9 @@ export default function ProductForm({
     setVideo(file ? { file, url: URL.createObjectURL(file) } : null)
   }
 
-  const existingCount = isEdit ? product!.images.length : 0
   const totalImages = existingCount + images.length
-  const enough = totalImages >= 3
+  const enough = totalImages >= 1
+  const atMax = totalImages >= MAX_IMAGES
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -85,7 +90,7 @@ export default function ProductForm({
     setFieldErrs({})
 
     if (!enough) {
-      setError('Please upload at least 3 product images.')
+      setError('Please upload at least 1 product image.')
       return
     }
 
@@ -127,8 +132,9 @@ export default function ProductForm({
 
       <Field label="Name" name="name" defaultValue={product?.name} required error={fieldErrs.name} />
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         <Field label="Price (₦)" name="price" type="number" min={0} defaultValue={product?.price} required error={fieldErrs.price} />
+        <Field label="Stock" name="quantity" type="number" min={0} defaultValue={product?.quantity ?? 0} required error={fieldErrs.quantity} />
         <Field label="Category" name="category" defaultValue={product?.category} required error={fieldErrs.category} />
       </div>
 
@@ -179,11 +185,12 @@ export default function ProductForm({
         <button
           type="button"
           onClick={() => imagesRef.current?.click()}
-          className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#E8D5A3] bg-[#FFF9ED] py-8 text-[#7A6856] transition-colors hover:border-[#B8962E] hover:text-[#B8962E]"
+          disabled={atMax}
+          className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#E8D5A3] bg-[#FFF9ED] py-8 text-[#7A6856] transition-colors hover:border-[#B8962E] hover:text-[#B8962E] disabled:cursor-not-allowed disabled:opacity-60"
         >
           <UploadCloud size={24} />
-          <span className="text-sm">Click to upload images</span>
-          <span className="text-xs">PNG, JPG or WEBP · at least 3</span>
+          <span className="text-sm">{atMax ? 'Maximum of 4 images reached' : 'Click to upload images'}</span>
+          <span className="text-xs">PNG, JPG or WEBP · 1 to 4 images</span>
         </button>
 
         {images.length > 0 && (
@@ -207,7 +214,7 @@ export default function ProductForm({
         )}
 
         <p className={`mt-2 text-xs ${enough ? 'text-[#7A6856]' : 'text-red-600'}`}>
-          {totalImages} image{totalImages === 1 ? '' : 's'} selected{enough ? '' : ` — need at least ${3 - totalImages} more`}
+          {totalImages} of {MAX_IMAGES} image{totalImages === 1 ? '' : 's'} selected{enough ? '' : ' — add at least 1'}
         </p>
       </div>
 
